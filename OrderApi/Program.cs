@@ -9,5 +9,7 @@ var app = WebApplication.Create();
 app.MapGet("/", () => "✅ Render test ok");
 
 // Render가 넣어주는 PORT 변수를 우선 사용, 없으면 5100
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5100";
+//var port = Environment.GetEnvironmentVariable("PORT") ?? "5100";
+//app.Run($"http://0.0.0.0:{port}");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5100";  // 기본 8080
 app.Run($"http://0.0.0.0:{port}");
