@@ -1,3 +1,4 @@
+namespace OrderBot.Services;
 
 using System.Security.Cryptography;
 using System.Text;
@@ -5,9 +6,7 @@ using System.Text.Json;
 using System.Web;               // System.Web.HttpUtility NuGet 필요
 using OrderBot.Models;
 
-namespace OrderBot.Services;
-
-public sealed class OrderWatcher
+public sealed class CoupangOrderClient
 {
     private readonly HttpClient _http;
     private readonly string _accessKey;
@@ -15,7 +14,7 @@ public sealed class OrderWatcher
     private readonly string _vendorId;
     private const string Host = "https://api-gateway.coupang.com";
 
-    public OrderWatcher(IHttpClientFactory factory, IConfiguration cfg)
+    public CoupangOrderClient(IHttpClientFactory factory, IConfiguration cfg)
     {
         _http = factory.CreateClient();
         _accessKey = ReadSecret("COUPANG_ACCESS_KEY");

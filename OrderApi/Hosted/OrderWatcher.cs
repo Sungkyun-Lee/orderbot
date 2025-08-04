@@ -2,13 +2,13 @@ namespace OrderBot.Hosted;
 
 using OrderBot.Services;
 
-public class OrderSheetResponse : BackgroundService
+public class OrderWatcher : BackgroundService
 {
     private readonly CoupangOrderClient _coupang;
     private readonly KakaoTalkNotifier _kakao;
     private DateTime _lastChecked = DateTime.UtcNow.AddMinutes(-30);
 
-    public OrderSheetResponse(CoupangOrderClient coupang, KakaoTalkNotifier kakao)
+    public OrderWatcher(CoupangOrderClient coupang, KakaoTalkNotifier kakao)
     {
         _coupang = coupang;
         _kakao = kakao;
