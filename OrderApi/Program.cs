@@ -32,8 +32,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CoupangOrderClient>();
-builder.Services.AddSingleton<KakaoTalkNotifier>();
-builder.Services.AddHostedService<OrderWatcher>();
+//builder.Services.AddSingleton<KakaoTalkNotifier>();
+//builder.Services.AddHostedService<OrderWatcher>();
 
 var app = builder.Build();
 app.MapGet("/health", () => "OK");
