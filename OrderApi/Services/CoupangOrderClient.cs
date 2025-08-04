@@ -25,10 +25,14 @@ public sealed class CoupangOrderClient
     public async Task<OrderSheetResponse?> GetOrdersAsync(
         DateTime from, DateTime to, string status = "ACCEPT", int max = 50)
     {
-        string path = $"/v2/providers/openapi/apis/api/v5/vendors/{_vendorId}/ordersheets";
+        //string path = $"/v2/providers/openapi/apis/api/v5/vendors/{_vendorId}/ordersheets";
+        string path = $"/v2/providers/openapi/apis/api/v4/vendors/{_vendorId}/ordersheets";
         var query = HttpUtility.ParseQueryString(string.Empty);
-        query["createdAtFrom"] = $"{from:yyyy-MM-dd}+09:00";
-        query["createdAtTo"] = $"{to:yyyy-MM-dd}+09:00";
+        //query["createdAtFrom"] = $"{from:yyyy-MM-dd}+09:00";
+        //query["createdAtTo"] = $"{to:yyyy-MM-dd}+09:00";
+        const string fmt = "yyyy-MM-dd'T'HH:mm:sszzz";  // 2025-08-04T09:30:00+09:00
+        query["createdAtFrom"] = from.ToString(fmt);
+        query["createdAtTo"] = to.ToString(fmt);
         query["status"] = status;
         query["maxPerPage"] = max.ToString();
 

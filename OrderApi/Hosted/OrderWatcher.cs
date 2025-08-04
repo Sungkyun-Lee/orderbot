@@ -18,18 +18,26 @@ public class OrderWatcher : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var now = DateTime.UtcNow;
-            var orders = await _coupang.GetOrdersAsync(_lastChecked, now, "ACCEPT");
-            _lastChecked = now;
-
-            if (orders?.Data?.Any() == true)
+            try
             {
-                var first = orders.Data.First();
-                string msg = $"새 주문 {orders.Data.Count}건! 첫 상품: {first.OrderItems.First().VendorItemName}";
-                await _kakao.SendTextAsync(msg);
-            }
+                var now = DateTime.UtcNow;
+                var orders = await _coupang.GetOrdersAsync(_lastChecked, now, "ACCEPT");
+                _lastChecked = now;
 
-            await Task.Delay(TimeSpan.FromMinutes(3), stoppingToken);
+                if (orders?.Data?.Any() == true)
+                {
+                    var first = orders.Data.First();
+                    string msg = $"새 주문 {orders.Data.Count}건! 첫 상품: {first.OrderItems.First().VendorItemName}";
+                    await _kakao.SendTextAsync(msg);
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(3), stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                            // 404 등 오류는 로그만 남기고 루프 계속
+                //_logger.LogError(ex, "OrderWatcher polling failed");
+            }
         }
     }
 }
