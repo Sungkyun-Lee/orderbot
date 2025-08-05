@@ -27,27 +27,31 @@
 
 using OrderBot.Services;
 using OrderBot.Hosted;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient();
+// 1) 반드시 Microsoft.Extensions.Http 패키지가 포함돼 있어야 합니다.
+builder.Services
+       .AddHttpClient("default")                  // ← 이름 지정 (또는 .AddHttpClient<CoupangOrderClient>())
+       .ConfigurePrimaryHttpMessageHandler(() =>
+       {
+           var handler = new HttpClientHandler
+           {
+               AutomaticDecompression =
+                   DecompressionMethods.GZip | DecompressionMethods.Deflate
+           };
+           return handler;                        // HttpMessageHandler 반환
+       });
+
+// 2) 나머지 DI
 builder.Services.AddSingleton<CoupangOrderClient>();
 //builder.Services.AddSingleton<KakaoTalkNotifier>();
 //builder.Services.AddHostedService<OrderWatcher>();
 
 var app = builder.Build();
 app.MapGet("/health", () => "OK");
-
-// 최근 3시간 내 최신 주문 1건 조회
-//app.MapGet("/orders/latest", async (CoupangOrderClient coupang) =>
-//{
-//    var now = DateTime.UtcNow;
-//    var res = await coupang.GetOrdersAsync(now.AddHours(-3), now, "ACCEPT");
-//    return res?.Data?.FirstOrDefault() is { } first
-//        ? Results.Ok(first)
-//        : Results.NotFound("최근 3시간 내 주문 없음");
-//});
-
 app.MapGet("/orders/latest", async (
     CoupangOrderClient coupang, ILogger<Program> log) =>
 {
