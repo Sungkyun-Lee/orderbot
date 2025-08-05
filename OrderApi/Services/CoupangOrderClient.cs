@@ -12,14 +12,16 @@ public sealed class CoupangOrderClient
     private readonly string _accessKey;
     private readonly string _secretKey;
     private readonly string _vendorId;
+    private readonly ILogger<CoupangOrderClient> _logger;   // ← 필드 추가
     private const string Host = "https://api-gateway.coupang.com";
 
-    public CoupangOrderClient(IHttpClientFactory factory, IConfiguration cfg)
+    public CoupangOrderClient(IHttpClientFactory factory, IConfiguration cfg, ILogger<CoupangOrderClient> logger)
     {
         _http = factory.CreateClient();
         _accessKey = ReadSecret("COUPANG_ACCESS_KEY");
         _secretKey = ReadSecret("COUPANG_SECRET_KEY");
         _vendorId = cfg["COUPANG_VENDOR_ID"]!;
+        _logger = logger;
     }
 
     public async Task<OrderSheetResponse?> GetOrdersAsync(
@@ -41,6 +43,14 @@ public sealed class CoupangOrderClient
         req.Headers.Add("Authorization", BuildHmac("GET", path, query.ToString()));
 
         var res = await _http.SendAsync(req);
+
+        if (!res.IsSuccessStatusCode)
+        {
+            var body = await res.Content.ReadAsStringAsync();
+            _logger.LogError("Coupang {Status}: {Body}", res.StatusCode, body);
+            // 예) {"code":"ERROR_SIGNATURE","message":"signature mismatch"}
+        }
+
         res.EnsureSuccessStatusCode();
 
         await using var stream = await res.Content.ReadAsStreamAsync();

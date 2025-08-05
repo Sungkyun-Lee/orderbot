@@ -7,11 +7,14 @@ public class OrderWatcher : BackgroundService
     private readonly CoupangOrderClient _coupang;
     private readonly KakaoTalkNotifier _kakao;
     private DateTime _lastChecked = DateTime.UtcNow.AddMinutes(-30);
+    private readonly ILogger<OrderWatcher> _logger;
 
-    public OrderWatcher(CoupangOrderClient coupang, KakaoTalkNotifier kakao)
+    public OrderWatcher(CoupangOrderClient coupang, KakaoTalkNotifier kakao,
+        ILogger<OrderWatcher> logger)
     {
         _coupang = coupang;
         _kakao = kakao;
+        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,7 +39,7 @@ public class OrderWatcher : BackgroundService
             catch (Exception ex)
             {
                             // 404 등 오류는 로그만 남기고 루프 계속
-                //_logger.LogError(ex, "OrderWatcher polling failed");
+                _logger.LogError(ex, "OrderWatcher polling failed");
             }
         }
     }
