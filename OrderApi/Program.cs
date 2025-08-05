@@ -34,15 +34,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1) 반드시 Microsoft.Extensions.Http 패키지가 포함돼 있어야 합니다.
 builder.Services
-       .AddHttpClient("default")                  // ← 이름 지정 (또는 .AddHttpClient<CoupangOrderClient>())
+       .AddHttpClient<CoupangOrderClient>()    // 타입 기반
        .ConfigurePrimaryHttpMessageHandler(() =>
        {
-           var handler = new HttpClientHandler
-           {
-               AutomaticDecompression =
-                   DecompressionMethods.GZip | DecompressionMethods.Deflate
-           };
-           return handler;                        // HttpMessageHandler 반환
+           var h = new HttpClientHandler();
+           h.AutomaticDecompression =
+               DecompressionMethods.GZip | DecompressionMethods.Deflate;
+           return h;
        });
 
 // 2) 나머지 DI

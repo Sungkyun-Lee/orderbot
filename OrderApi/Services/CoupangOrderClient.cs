@@ -15,9 +15,9 @@ public sealed class CoupangOrderClient
     private readonly ILogger<CoupangOrderClient> _logger;   // ← 필드 추가
     private const string Host = "https://api-gateway.coupang.com";
 
-    public CoupangOrderClient(IHttpClientFactory factory, IConfiguration cfg, ILogger<CoupangOrderClient> logger)
+    public CoupangOrderClient(HttpClient http, IConfiguration cfg, ILogger<CoupangOrderClient> logger)
     {
-        _http = factory.CreateClient();
+        _http = http;
         _accessKey = ReadSecret("COUPANG_ACCESS_KEY");
         _secretKey = ReadSecret("COUPANG_SECRET_KEY");
         _vendorId = cfg["COUPANG_VENDOR_ID"]!;
