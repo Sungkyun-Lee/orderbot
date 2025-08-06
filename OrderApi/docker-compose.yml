@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  orderbot:
+    container_name: orderbot
+    build:
+      context: .          # 현재 폴더(Dockerfile 있는 곳)
+      dockerfile: Dockerfile
+    env_file: .env        # .env 전체를 환경 변수로 주입
+    ports:
+      - "5000:80"         # 호스트:컨테이너
+    # 로그가 길어질 때 재시작 옵션(선택)
+    restart: unless-stopped

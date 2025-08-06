@@ -2,7 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet publish OrderApi -c Release -o /out
+
+RUN echo "=== DEBUG find . -name \"*.csproj\" ===" && find . -name "*.csproj"
+RUN dotnet publish ./OrderApi.csproj -c Release -o /out
 
 ######################## 2단계: runtime #######################
 FROM mcr.microsoft.com/dotnet/aspnet:8.0

@@ -56,7 +56,9 @@ app.MapGet("/orders/latest", async (
     try
     {
         var now = DateTime.UtcNow;
-        var res = await coupang.GetOrdersAsync(now.AddHours(-3), now, "ACCEPT");
+        //var res = await coupang.GetOrdersAsync(now.AddHours(-3), now);
+        //var res = await coupang.GetOrdersAsync(now.AddDays(-1), now,"INSTRUCT");
+        var res = await coupang.GetOrdersAsync(now.AddDays(-1), now.AddDays(1), "ACCEPT");
         var first = res?.Data?.FirstOrDefault();
 
         return first is null

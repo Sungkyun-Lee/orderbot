@@ -7,7 +7,10 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5101",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+		  "COUPANG_ACCESS_KEY": "1867f48c-ac55-46c2-b64e-911f6a383ca1",
+          "COUPANG_SECRET_KEY": "cfa80d556f1c5aa79085fbdec63cea4545aa8f73",
+          "COUPANG_VENDOR_ID":  "A01006292"
       }
     },
     "https": {
@@ -16,7 +19,10 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7277;http://localhost:5101",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+		"COUPANG_ACCESS_KEY": "1867f48c-ac55-46c2-b64e-911f6a383ca1",
+        "COUPANG_SECRET_KEY": "cfa80d556f1c5aa79085fbdec63cea4545aa8f73",
+        "COUPANG_VENDOR_ID":  "A01006292"
       }
     }
   }
